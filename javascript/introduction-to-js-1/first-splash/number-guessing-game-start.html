@@ -30,9 +30,8 @@
     <p>We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you if your guess was too high or too low.</p>
 
     <div class="form">
-      <label for="guessField">Enter a guess: </label>
-      <input type="text" id="guessField" class="guessField">
-      <input type="submit" value="Submit guess" class="guessSubmit">
+      <label for="guessField">予想を入力してください: </label><input type="text" id="guessField" class="guessField">
+      <input type="submit" value="予想を投稿" class="guessSubmit">
     </div>
 
     <div class="resultParas">
@@ -54,25 +53,26 @@
 
       let guessCount = 1;
       let resultButton
+      
 
       function checkGuess(){
         let userGuess = Number(guessField.value);
         if(guessCount === 1){
-          guesses.textContent("Your previsioned number")
+          guesses.textContent = "Your previsioned number"
         }
         guesses.textContent += userGuess + ' '
 
         if(userGuess === randomNumber){
-          lastResult.textContent("that's the answer")
+          lastResult.textContent = "that's the answer"
           lastResult.style.backgroundColor = 'green';
           lowOrHi.textContent = ''
-          set GameOver();
+          setGameOver();
         } else if (guessCount == 10){
-          lastResult.textContent("Game Over")
-          set GameOver()
+          lastResult.textContent = "Game Over"
+          setGameOver()
         } else{
           lastResult.textContent = 'Wrong';
-          lastResult.sytle.backgroundColor = 'red'
+          lastResult.style.backgroundColor = 'red';
           if(userGuess < randomNumber){
             lowOrHi.textContent = 'Too low';
           }else if(userGuess > randomNumber){
@@ -83,6 +83,38 @@
         guessCount++;
         guessField.value = '';
         guessField.focus();
+      }
+
+      guessSubmit.addEventListener('click', checkGuess)
+
+      function setGameOver(){
+        guessField.disabled = true;
+        guessSubmit.disabled = true;
+        resetButton = document.createElement('button')
+        resetButton.textContent = 'New Game';
+        document.body.appendChild(resetButton);
+        resetButton.addEventListener('click', resetGame);
+        
+      }
+
+      function resetGame(){
+        guessCount = 1;
+
+        const resetParas = document.querySelectorAll('.resultParas p')
+        for(let i = 0; i < resetParas.length; i++){
+          resetParas[i].textContent = '';
+        }
+
+        resetButton.parentNode.removeChild(resetButton);
+
+        guessField.disabled = false;
+        guessSubmit.disabled = false;
+        guessField.value = '';
+        guessField.focus();
+
+        lastResult.style.backgroundColor = 'white';
+
+        randomNumber = Math.floor(Math.random() * 100) + 1
       }
 
     </script>
